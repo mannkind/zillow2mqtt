@@ -1,0 +1,12 @@
+FROM golang:1.12-alpine3.9 as build
+ENV GO111MODULE=on
+WORKDIR /go/src/app
+COPY . .
+RUN apk add --no-cache --update build-base git && \
+    GOOS=linux GOARCH=__GOLANG_ARCH__ make build
+
+FROM __BASEIMAGE_ARCH__/alpine:3.9
+COPY --from=build /go/src/app/zillow2mqtt /usr/local/bin/zillow2mqtt
+VOLUME /config
+RUN apk add --no-cache --update ca-certificates
+CMD ["zillow2mqtt"]
