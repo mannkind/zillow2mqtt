@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"strings"
 	"time"
 
 	"github.com/jmank88/zillow"
+	log "github.com/sirupsen/logrus"
 )
 
 type client struct {
@@ -48,24 +47,22 @@ func (c *client) register(l observer) {
 
 func (c *client) publish(e event) {
 	for o := range c.observers {
-		o.receive(e)
+		o.receiveState(e)
 	}
 }
 
 func (c *client) loop(once bool) {
 	for {
-		log.Print("Beginning lookup")
+		log.Info("Beginning lookup")
 		for _, zpid := range c.zpids {
 			if info, err := c.lookup(zpid); err == nil {
 				c.publish(event{
 					version: 1,
 					data:    c.adapt(info),
 				})
-			} else {
-				log.Print(err)
 			}
 		}
-		log.Print("Ending lookup")
+		log.Info("Ending lookup")
 
 		if once {
 			break
@@ -80,8 +77,12 @@ func (c *client) lookup(zpid string) (*zillow.ZestimateResult, error) {
 
 	result, err := client.GetZestimate(zillow.ZestimateRequest{Zpid: zpid})
 	if err != nil {
-		log.Print(err)
-		return &zillow.ZestimateResult{}, fmt.Errorf("Unable to fetch information")
+		log.WithFields(log.Fields{
+			"error": err,
+			"zpid":  zpid,
+		}).Error("Unable to look up Zillow estimate")
+
+		return &zillow.ZestimateResult{}, err
 	}
 
 	return result, nil

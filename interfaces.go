@@ -1,8 +1,8 @@
 package main
 
 type eventData struct {
-	Zpid   string
-	Amount int
+	Zpid   string `mqtt:",ignore" mqttDiscoveryType:",ignore"`
+	Amount int    `mqtt:"zestimate" mqttDiscoveryType:"sensor"`
 }
 
 type event struct {
@@ -11,10 +11,10 @@ type event struct {
 }
 
 type observer interface {
-	receive(event)
+	receiveState(event)
+	receiveCommand(int64, event)
 }
 
 type publisher interface {
 	register(observer)
-	publish(event)
 }
