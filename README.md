@@ -31,13 +31,13 @@ Configuration happens via environmental variables
 
 ```bash
 ZILLOW_APIKEY               - The api key for zillow
-ZILLOW_ZPIDS                - The comma separated zpid:name pairs, defaults to ""
+ZILLOW_ZPID                 - The comma separated zpid:name pairs, defaults to ""
 ZILLOW_LOOKUPINTERVAL       - The duration to wait before looking up the zestimate again, defaults to "24h"
 MQTT_TOPICPREFIX            - [OPTIONAL] The MQTT topic on which to publish the lookup results, defaults to "home/zillow"
 MQTT_DISCOVERY              - [OPTIONAL] The MQTT discovery flag for Home Assistant, defaults to false
 MQTT_DISCOVERYPREFIX        - [OPTIONAL] The MQTT discovery prefix for Home Assistant, defaults to "homeassistant"
 MQTT_DISCOVERYNAME          - [OPTIONAL] The MQTT discovery name for Home Assistant, defaults to "zillow"
-MQTT_CLIENTID               - [OPTIONAL] The clientId, defaults to "DefaultZillow2MqttClientID"
+MQTT_CLIENTID               - [OPTIONAL] The clientId, defaults to ""
 MQTT_BROKER                 - [OPTIONAL] The MQTT broker, defaults to "tcp://mosquitto.org:1883"
 MQTT_USERNAME               - [OPTIONAL] The MQTT username, default to ""
 MQTT_PASSWORD               - [OPTIONAL] The MQTT password, default to ""
