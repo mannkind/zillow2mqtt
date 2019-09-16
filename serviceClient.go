@@ -10,15 +10,13 @@ import (
 )
 
 type serviceClient struct {
-	twomqtt.Publisher
+	twomqtt.StatePublisher
 	serviceClientConfig
-	observers map[twomqtt.Observer]struct{}
 }
 
 func newServiceClient(serviceClientCfg serviceClientConfig) *serviceClient {
 	c := serviceClient{
 		serviceClientConfig: serviceClientCfg,
-		observers:           map[twomqtt.Observer]struct{}{},
 	}
 
 	log.WithFields(log.Fields{
@@ -32,22 +30,6 @@ func newServiceClient(serviceClientCfg serviceClientConfig) *serviceClient {
 
 func (c *serviceClient) run() {
 	go c.loop()
-}
-
-func (c *serviceClient) Register(l twomqtt.Observer) {
-	c.observers[l] = struct{}{}
-}
-
-func (c *serviceClient) sendState(e twomqtt.Event) {
-	log.WithFields(log.Fields{
-		"event": e,
-	}).Debug("Sending event to observers")
-
-	for o := range c.observers {
-		o.ReceiveState(e)
-	}
-
-	log.Debug("Finished sending event to observers")
 }
 
 func (c *serviceClient) loop() {
@@ -64,7 +46,7 @@ func (c *serviceClient) loop() {
 				continue
 			}
 
-			c.sendState(event)
+			c.SendState(event)
 		}
 
 		log.WithFields(log.Fields{
