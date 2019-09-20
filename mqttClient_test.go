@@ -2,10 +2,8 @@ package main
 
 import (
 	"os"
-	"reflect"
 	"testing"
 
-	"github.com/mannkind/twomqtt"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -107,13 +105,9 @@ func TestReceieveState(t *testing.T) {
 			Zpid:   v.ZPid,
 			Amount: v.ActualAmount,
 		}
-		event := twomqtt.Event{
-			Type:    reflect.TypeOf(obj),
-			Payload: obj,
-		}
 
 		c := initialize()
-		c.mqttClient.ReceiveState(event)
+		c.mqttClient.receiveState(obj)
 
 		actualPayload := c.mqttClient.LastPublishedOnTopic(v.ExpectedTopic)
 		if actualPayload != v.ExpectedPayload {

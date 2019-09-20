@@ -11,15 +11,16 @@ import (
 )
 
 type mqttClient struct {
-	twomqtt.StateObserver
-	*twomqtt.MQTTProxy
 	mqttClientConfig
+	*twomqtt.MQTTProxy
+	stateUpdateChan stateChannel
 }
 
-func newMQTTClient(mqttClientCfg mqttClientConfig, client *twomqtt.MQTTProxy) *mqttClient {
+func newMQTTClient(mqttClientCfg mqttClientConfig, client *twomqtt.MQTTProxy, stateUpdateChan stateChannel) *mqttClient {
 	c := mqttClient{
 		MQTTProxy:        client,
 		mqttClientConfig: mqttClientCfg,
+		stateUpdateChan:  stateUpdateChan,
 	}
 
 	c.Initialize(
@@ -34,6 +35,7 @@ func newMQTTClient(mqttClientCfg mqttClientConfig, client *twomqtt.MQTTProxy) *m
 
 func (c *mqttClient) run() {
 	c.Run()
+	go c.receive()
 }
 
 func (c *mqttClient) onConnect(client mqtt.Client) {
@@ -86,16 +88,13 @@ func (c *mqttClient) publishDiscovery() {
 	log.Info("Finished MQTT discovery publishing")
 }
 
-func (c *mqttClient) ReceiveState(e twomqtt.Event) {
-	if e.Type != reflect.TypeOf(zestimate{}) {
-		msg := "Unexpected event type; skipping"
-		log.WithFields(log.Fields{
-			"type": e.Type,
-		}).Error(msg)
-		return
+func (c *mqttClient) receive() {
+	for info := range c.stateUpdateChan {
+		c.receiveState(info)
 	}
+}
 
-	info := e.Payload.(zestimate)
+func (c *mqttClient) receiveState(info zestimate) {
 	name := c.ZPIDS[info.Zpid]
 	obj := reflect.ValueOf(info)
 

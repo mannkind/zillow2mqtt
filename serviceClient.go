@@ -1,22 +1,21 @@
 package main
 
 import (
-	"reflect"
 	"time"
 
 	"github.com/jmank88/zillow"
-	"github.com/mannkind/twomqtt"
 	log "github.com/sirupsen/logrus"
 )
 
 type serviceClient struct {
-	twomqtt.StatePublisher
 	serviceClientConfig
+	stateUpdateChan stateChannel
 }
 
-func newServiceClient(serviceClientCfg serviceClientConfig) *serviceClient {
+func newServiceClient(serviceClientCfg serviceClientConfig, stateUpdateChan stateChannel) *serviceClient {
 	c := serviceClient{
 		serviceClientConfig: serviceClientCfg,
+		stateUpdateChan:     stateUpdateChan,
 	}
 
 	log.WithFields(log.Fields{
@@ -41,12 +40,12 @@ func (c *serviceClient) loop() {
 				continue
 			}
 
-			event, err := c.adapt(info)
+			obj, err := c.adapt(info)
 			if err != nil {
 				continue
 			}
 
-			c.SendState(event)
+			c.stateUpdateChan <- obj
 		}
 
 		log.WithFields(log.Fields{
@@ -77,7 +76,7 @@ func (c *serviceClient) lookup(zpid string) (*zillow.ZestimateResult, error) {
 	return result, nil
 }
 
-func (c *serviceClient) adapt(info *zillow.ZestimateResult) (twomqtt.Event, error) {
+func (c *serviceClient) adapt(info *zillow.ZestimateResult) (zestimate, error) {
 	log.WithFields(log.Fields{
 		"onfi": info,
 	}).Debug("Adapting zestimate information")
@@ -87,11 +86,6 @@ func (c *serviceClient) adapt(info *zillow.ZestimateResult) (twomqtt.Event, erro
 		Amount: info.Zestimate.Amount.Value,
 	}
 
-	event := twomqtt.Event{
-		Type:    reflect.TypeOf(obj),
-		Payload: obj,
-	}
-
 	log.Debug("Finished adapting zestimate information")
-	return event, nil
+	return obj, nil
 }
