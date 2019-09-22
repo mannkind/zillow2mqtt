@@ -78,6 +78,8 @@ func (c *mqttClient) publishDiscovery() {
 			mqd := c.NewMQTTDiscovery(name, sensor, sensorType)
 			mqd.Icon = "mdi:home-variant"
 			mqd.UnitOfMeasurement = "$"
+			mqd.Device.Name = Name
+			mqd.Device.SWVersion = Version
 
 			c.PublishDiscovery(mqd)
 		}

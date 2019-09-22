@@ -45,14 +45,14 @@ func TestDiscovery(t *testing.T) {
 			defaultDiscoveryName,
 			defaultTopicPrefix,
 			"homeassistant/sensor/" + defaultDiscoveryName + "/zestimate/config",
-			"{\"availability_topic\":\"" + defaultTopicPrefix + "/status\",\"icon\":\"mdi:home-variant\",\"name\":\"" + defaultDiscoveryName + " zestimate\",\"state_topic\":\"" + defaultTopicPrefix + "/zestimate/state\",\"unique_id\":\"zillow.zestimate\",\"unit_of_measurement\":\"$\"}",
+			"{\"availability_topic\":\"" + defaultTopicPrefix + "/status\",\"device\":{\"identifiers\":[\"" + defaultTopicPrefix + "/status\"],\"manufacturer\":\"twomqtt\",\"name\":\"x2mqtt\",\"sw_version\":\"X.X.X\"},\"icon\":\"mdi:home-variant\",\"name\":\"" + defaultDiscoveryName + " zestimate\",\"state_topic\":\"" + defaultTopicPrefix + "/zestimate/state\",\"unique_id\":\"zillow.zestimate\",\"unit_of_measurement\":\"$\"}",
 		},
 		{
 			knownZPID + ":" + knownZPIDName,
 			knownDiscoveryName,
 			knownTopicPrefix,
 			"homeassistant/sensor/" + knownDiscoveryName + "/" + knownZPIDName + "_zestimate/config",
-			"{\"availability_topic\":\"" + knownTopicPrefix + "/status\",\"icon\":\"mdi:home-variant\",\"name\":\"" + knownDiscoveryName + " " + knownZPIDName + " zestimate\",\"state_topic\":\"" + knownTopicPrefix + "/" + knownZPIDName + "/zestimate/state\",\"unique_id\":\"" + knownDiscoveryName + "." + knownZPIDName + ".zestimate\",\"unit_of_measurement\":\"$\"}",
+			"{\"availability_topic\":\"" + knownTopicPrefix + "/status\",\"device\":{\"identifiers\":[\"" + knownTopicPrefix + "/status\"],\"manufacturer\":\"twomqtt\",\"name\":\"x2mqtt\",\"sw_version\":\"X.X.X\"},\"icon\":\"mdi:home-variant\",\"name\":\"" + knownDiscoveryName + " " + knownZPIDName + " zestimate\",\"state_topic\":\"" + knownTopicPrefix + "/" + knownZPIDName + "/zestimate/state\",\"unique_id\":\"" + knownDiscoveryName + "." + knownZPIDName + ".zestimate\",\"unit_of_measurement\":\"$\"}",
 		},
 	}
 
