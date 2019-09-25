@@ -16,12 +16,12 @@ See also Zillow's API documentation at <http://www.zillow.com/howto/api/APIOverv
 docker run -d --name="zillow2mqtt" -e "ZILLOW_APIKEY=1234567890" ZILLOW_ZPIDS="5454:Home,54654654:VacationProperty" -v /etc/localtime:/etc/localtime:ro mannkind/zillow2mqtt
 ```
 
-### Via Make
+### Via Mage
 
 ```bash
 git clone https://github.com/mannkind/zillow2mqtt
 cd zillow2mqtt
-make
+mage
 ZILLOW_APIKEY="1234567890" ZILLOW_ZPIDS="5454:Home,54654654:VacationProperty" ./zillow2mqtt
 ```
 
