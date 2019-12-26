@@ -34,25 +34,34 @@ func TestDiscovery(t *testing.T) {
 	defer clearEnvs()
 
 	var tests = []struct {
-		ZPIDS           string
-		DiscoveryName   string
-		TopicPrefix     string
-		ExpectedTopic   string
-		ExpectedPayload string
+		ZPIDS                 string
+		DiscoveryName         string
+		TopicPrefix           string
+		ExpectedName          string
+		ExpectedStateTopic    string
+		ExpectedUniqueID      string
+		ExpectedIcon          string
+		ExpectedUnitOfMeasure string
 	}{
 		{
 			knownZPID,
 			defaultDiscoveryName,
 			defaultTopicPrefix,
-			"homeassistant/sensor/" + defaultDiscoveryName + "/zestimate/config",
-			"{\"availability_topic\":\"" + defaultTopicPrefix + "/status\",\"device\":{\"identifiers\":[\"" + defaultTopicPrefix + "/status\"],\"manufacturer\":\"twomqtt\",\"name\":\"x2mqtt\",\"sw_version\":\"X.X.X\"},\"icon\":\"mdi:home-variant\",\"name\":\"" + defaultDiscoveryName + " zestimate\",\"state_topic\":\"" + defaultTopicPrefix + "/zestimate/state\",\"unique_id\":\"zillow.zestimate\",\"unit_of_measurement\":\"$\"}",
+			defaultDiscoveryName + " zestimate",
+			defaultTopicPrefix + "/zestimate/state",
+			"zillow.zestimate",
+			"mdi:home-variant",
+			"$",
 		},
 		{
 			knownZPID + ":" + knownZPIDName,
 			knownDiscoveryName,
 			knownTopicPrefix,
-			"homeassistant/sensor/" + knownDiscoveryName + "/" + knownZPIDName + "_zestimate/config",
-			"{\"availability_topic\":\"" + knownTopicPrefix + "/status\",\"device\":{\"identifiers\":[\"" + knownTopicPrefix + "/status\"],\"manufacturer\":\"twomqtt\",\"name\":\"x2mqtt\",\"sw_version\":\"X.X.X\"},\"icon\":\"mdi:home-variant\",\"name\":\"" + knownDiscoveryName + " " + knownZPIDName + " zestimate\",\"state_topic\":\"" + knownTopicPrefix + "/" + knownZPIDName + "/zestimate/state\",\"unique_id\":\"" + knownDiscoveryName + "." + knownZPIDName + ".zestimate\",\"unit_of_measurement\":\"$\"}",
+			knownDiscoveryName + " " + knownZPIDName + " zestimate",
+			knownTopicPrefix + "/" + knownZPIDName + "/zestimate/state",
+			knownDiscoveryName + "." + knownZPIDName + ".zestimate",
+			"mdi:home-variant",
+			"$",
 		},
 	}
 
@@ -60,16 +69,29 @@ func TestDiscovery(t *testing.T) {
 		setEnvs("true", v.DiscoveryName, v.TopicPrefix, v.ZPIDS)
 
 		c := initialize()
-		c.mqttClient.publishDiscovery()
+		mqds := c.sink.discovery()
 
-		actualPayload := c.mqttClient.LastPublishedOnTopic(v.ExpectedTopic)
-		if actualPayload != v.ExpectedPayload {
-			t.Errorf("Actual:%s\nExpected:%s", actualPayload, v.ExpectedPayload)
+		for _, mqd := range mqds {
+			if mqd.Name != v.ExpectedName {
+				t.Errorf("discovery Name does not match; %s vs %s", mqd.Name, v.ExpectedName)
+			}
+			if mqd.StateTopic != v.ExpectedStateTopic {
+				t.Errorf("discovery StateTopic does not match; %s vs %s", mqd.StateTopic, v.ExpectedStateTopic)
+			}
+			if mqd.UniqueID != v.ExpectedUniqueID {
+				t.Errorf("discovery UniqueID does not match; %s vs %s", mqd.UniqueID, v.ExpectedUniqueID)
+			}
+			if mqd.Icon != v.ExpectedIcon {
+				t.Errorf("discovery Icon does not match; %s vs %s", mqd.Icon, v.ExpectedIcon)
+			}
+			if mqd.UnitOfMeasurement != v.ExpectedUnitOfMeasure {
+				t.Errorf("discovery UnitOfMeasurement does not match; %s vs %s", mqd.UnitOfMeasurement, v.ExpectedUnitOfMeasure)
+			}
 		}
 	}
 }
 
-func TestReceieveState(t *testing.T) {
+func TestPublish(t *testing.T) {
 	defer clearEnvs()
 
 	var tests = []struct {
@@ -101,15 +123,15 @@ func TestReceieveState(t *testing.T) {
 	for _, v := range tests {
 		setEnvs("false", "", v.TopicPrefix, v.ZPIDS)
 
-		obj := zestimate{
+		obj := sourceRep{
 			Zpid:   v.ZPid,
 			Amount: v.ActualAmount,
 		}
 
 		c := initialize()
-		c.mqttClient.receiveState(obj)
+		publishedState := c.sink.publish(obj)
 
-		actualPayload := c.mqttClient.LastPublishedOnTopic(v.ExpectedTopic)
+		actualPayload := publishedState.Payload
 		if actualPayload != v.ExpectedPayload {
 			t.Errorf("Actual:%s\nExpected:%s", actualPayload, v.ExpectedPayload)
 		}
