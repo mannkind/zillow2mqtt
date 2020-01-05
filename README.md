@@ -6,28 +6,36 @@ License](https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square)]
 [![Coverage Status](https://img.shields.io/codecov/c/github/mannkind/zillow2mqtt/master.svg)](http://codecov.io/github/mannkind/zillow2mqtt?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mannkind/zillow2mqtt)](https://goreportcard.com/report/github.com/mannkind/zillow2mqtt)
 
+An experiment to publish Zillow ZEstimates to MQTT.
+
 See also Zillow's API documentation at <http://www.zillow.com/howto/api/APIOverview.htm>
 
-## Installation
+## Use
 
-### Via Docker
+The application can be locally built using `mage` or you can utilize the multi-architecture Docker image(s).
 
-```bash
-docker run -d --name="zillow2mqtt" -e "ZILLOW_APIKEY=1234567890" ZILLOW_ZPIDS="5454:Home,54654654:VacationProperty" -v /etc/localtime:/etc/localtime:ro mannkind/zillow2mqtt
-```
-
-### Via Mage
+### Example
 
 ```bash
-git clone https://github.com/mannkind/zillow2mqtt
-cd zillow2mqtt
-mage
-ZILLOW_APIKEY="1234567890" ZILLOW_ZPIDS="5454:Home,54654654:VacationProperty" ./zillow2mqtt
+docker run \
+-e ZILLOW_APIKEY="B1-AWz18xy032zklA_6Nmn1" \
+-e ZILLOW_ZPIDS="69103754:MyAddress" \
+-e MQTT_BROKER="tcp://localhost:1883" \
+-e MQTT_DISCOVERY="true" \
+mannkind/unifi2mqtt:latest
 ```
 
-## Configuration
+OR
 
-Configuration happens via environmental variables
+```bash
+ZILLOW_APIKEY="B1-AWz18xy032zklA_6Nmn1" \
+ZILLOW_ZPIDS="69103754:MyAddress" \
+MQTT_BROKER="tcp://localhost:1883" \
+MQTT_DISCOVERY="true" \
+./zillow2mqtt 
+```
+
+## Environment Variables
 
 ```bash
 ZILLOW_APIKEY               - The api key for zillow
