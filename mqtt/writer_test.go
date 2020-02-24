@@ -1,14 +1,27 @@
-package main
+package mqtt
 
 import (
 	"os"
 	"testing"
 
+	"github.com/mannkind/twomqtt"
+	"github.com/mannkind/zillow2mqtt/shared"
 	log "github.com/sirupsen/logrus"
 )
 
 func init() {
 	log.SetLevel(log.PanicLevel)
+}
+
+func initialize() *Writer {
+	opts := shared.NewOpts()
+	v := shared.NewRepresentationChannel()
+	v3 := shared.NewRepresentationChannelIncoming(v)
+	mqttOpts := NewOpts(opts)
+	twomqttMQTTOpts := mqttOpts.MQTTOpts
+	twomqttMQTT := twomqtt.NewMQTT(twomqttMQTTOpts)
+	writer := NewWriter(twomqttMQTT, mqttOpts, v3)
+	return writer
 }
 
 func setEnvs(d, dn, tp, a string) {
@@ -69,7 +82,7 @@ func TestDiscovery(t *testing.T) {
 		setEnvs("true", v.DiscoveryName, v.TopicPrefix, v.ZPIDS)
 
 		c := initialize()
-		mqds := c.sink.discovery()
+		mqds := c.discovery()
 
 		for _, mqd := range mqds {
 			if mqd.Name != v.ExpectedName {
@@ -123,13 +136,13 @@ func TestPublish(t *testing.T) {
 	for _, v := range tests {
 		setEnvs("false", "", v.TopicPrefix, v.ZPIDS)
 
-		obj := sourceRep{
+		obj := shared.Representation{
 			Zpid:   v.ZPid,
 			Amount: v.ActualAmount,
 		}
 
 		c := initialize()
-		publishedState := c.sink.publish(obj)
+		publishedState := c.publish(obj)
 
 		actualPayload := publishedState.Payload
 		if actualPayload != v.ExpectedPayload {
