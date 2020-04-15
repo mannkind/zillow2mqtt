@@ -9,6 +9,7 @@ namespace Zillow.Models.SourceManager
     {
         public string ZPID { get; set; } = string.Empty;
         public decimal Amount { get; set; } = 0.0M;
+        public bool Ok { get; set; } = false;
 
         public override string ToString() => $"ZPID: {this.ZPID}, Amount: {this.Amount}";
     }
