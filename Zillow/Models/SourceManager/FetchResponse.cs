@@ -1,11 +1,11 @@
 using System;
 
-namespace Zillow.Models.Shared
+namespace Zillow.Models.SourceManager
 {
     /// <summary>
-    /// The shared resource across the application
+    /// The response from the source
     /// </summary>
-    public class Resource
+    public class FetchResponse
     {
         /// <summary>
         /// 
@@ -17,6 +17,9 @@ namespace Zillow.Models.Shared
         /// 
         /// </summary>
         /// <value></value>
-        public decimal Amount { get; set; } = 0.0M;
+        public decimal Amount { get; set; } = Decimal.MinValue;
+
+        /// <inheritdoc />
+        public override string ToString() => $"ZPID: {this.ZPID}, Amount: {this.Amount}";
     }
 }

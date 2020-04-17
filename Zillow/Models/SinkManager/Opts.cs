@@ -9,6 +9,9 @@ namespace Zillow.Models.SinkManager
     {
         public const string Section = "Zillow:Sink";
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Opts()
         {
             this.TopicPrefix = "home/zillow";

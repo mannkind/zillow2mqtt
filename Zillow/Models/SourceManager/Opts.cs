@@ -9,9 +9,16 @@ namespace Zillow.Models.SourceManager
     {
         public const string Section = "Zillow:Source";
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
         public string ApiKey { get; set; } = string.Empty;
-        public TimeSpan PollingInterval { get; set; } = new TimeSpan(24, 3, 31);
 
-        public override string ToString() => $"Polling Interval: {this.PollingInterval}";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public TimeSpan PollingInterval { get; set; } = new TimeSpan(24, 3, 31);
     }
 }

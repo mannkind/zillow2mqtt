@@ -43,9 +43,9 @@ Configuration happens via environmental variables
 
 ```bash
 ZILLOW__SOURCE__APIKEY                     - The Zillow API key
+ZILLOW__SHARED__RESOURCES__#__ZPID         - The Zillow Property ID for a specific property
+ZILLOW__SHARED__RESOURCES__#__Slug         - The slug to identify the specific Zillow Property ID
 ZILLOW__SOURCE__POLLINGINTERVAL            - [OPTIONAL] The delay between zestimates lookups, defaults to "1.00:03:31"
-ZILLOW__SHARED__RESOURCES__#__ZPID         - The Zillow Property ID
-ZILLOW__SHARED__RESOURCES__#__Slug         - The slug for the Zillow Property ID
 ZILLOW__SINK__TOPICPREFIX                  - [OPTIONAL] The MQTT topic on which to publish the collection lookup results, defaults to "home/zillow"
 ZILLOW__SINK__DISCOVERYENABLED             - [OPTIONAL] The MQTT discovery flag for Home Assistant, defaults to false
 ZILLOW__SINK__DISCOVERYPREFIX              - [OPTIONAL] The MQTT discovery prefix for Home Assistant, defaults to "homeassistant"
