@@ -72,6 +72,8 @@ namespace Zillow.Managers
                 foreach (var map in mapping)
                 {
                     var discovery = this.BuildDiscovery(input.Slug, map.Sensor, assembly, false);
+                    discovery.Icon = "mdi:home-variant";
+
                     tasks.Add(this.PublishDiscoveryAsync(input.Slug, map.Sensor, map.Type, discovery, cancellationToken));
                 }
             }
