@@ -17,6 +17,6 @@ namespace Zillow.Models.Shared
         /// 
         /// </summary>
         /// <value></value>
-        public decimal Amount { get; set; } = 0.0M;
+        public decimal ZEstimate { get; set; } = 0.0M;
     }
 }

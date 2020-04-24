@@ -17,22 +17,22 @@ The application can be locally built using `dotnet build` or you can utilize the
 
 ```bash
 docker run \
--e ZILLOW__SOURCE__APIKEY="B1-AWz18xy032zklA_6Nmn1" \
--e ZILLOW__SHARED__RESOURCES__0__ZPID="69103754" \
--e ZILLOW__SHARED__RESOURCES__0__Slug="home" \
--e ZILLOW__SINK__BROKER="localhost" \
--e ZILLOW__SINK__DISCOVERYENABLED="true" \
+-e ZILLOW__APIKEY="B1-AWz18xy032zklA_6Nmn1" \
+-e ZILLOW__RESOURCES__0__ZPID="69103754" \
+-e ZILLOW__RESOURCES__0__Slug="home" \
+-e ZILLOW__MQTT__BROKER="localhost" \
+-e ZILLOW__MQTT__DISCOVERYENABLED="true" \
 mannkind/zillow2mqtt:latest
 ```
 
 OR
 
 ```bash
-ZILLOW__SOURCE__APIKEY="B1-AWz18xy032zklA_6Nmn1" \
-ZILLOW__SHARED__RESOURCES__0__ZPID="69103754" \
-ZILLOW__SHARED__RESOURCES__0__Slug="home" \
-ZILLOW__SINK__BROKER="localhost" \
-ZILLOW__SINK__DISCOVERYENABLED="true" \
+ZILLOW__APIKEY="B1-AWz18xy032zklA_6Nmn1" \
+ZILLOW__RESOURCES__0__ZPID="69103754" \
+ZILLOW__RESOURCES__0__Slug="home" \
+ZILLOW__MQTT__BROKER="localhost" \
+ZILLOW__MQTT__DISCOVERYENABLED="true" \
 ./zillow2mqtt 
 ```
 
@@ -42,15 +42,15 @@ ZILLOW__SINK__DISCOVERYENABLED="true" \
 Configuration happens via environmental variables
 
 ```bash
-ZILLOW__SOURCE__APIKEY                     - The Zillow API key
-ZILLOW__SHARED__RESOURCES__#__ZPID         - The Zillow Property ID for a specific property
-ZILLOW__SHARED__RESOURCES__#__Slug         - The slug to identify the specific Zillow Property ID
-ZILLOW__SOURCE__POLLINGINTERVAL            - [OPTIONAL] The delay between zestimates lookups, defaults to "1.00:03:31"
-ZILLOW__SINK__TOPICPREFIX                  - [OPTIONAL] The MQTT topic on which to publish the collection lookup results, defaults to "home/zillow"
-ZILLOW__SINK__DISCOVERYENABLED             - [OPTIONAL] The MQTT discovery flag for Home Assistant, defaults to false
-ZILLOW__SINK__DISCOVERYPREFIX              - [OPTIONAL] The MQTT discovery prefix for Home Assistant, defaults to "homeassistant"
-ZILLOW__SINK__DISCOVERYNAME                - [OPTIONAL] The MQTT discovery name for Home Assistant, defaults to "zillow"
-ZILLOW__SINK__BROKER                       - [OPTIONAL] The MQTT broker, defaults to "test.mosquitto.org"
-ZILLOW__SINK__USERNAME                     - [OPTIONAL] The MQTT username, default to ""
-ZILLOW__SINK__PASSWORD                     - [OPTIONAL] The MQTT password, default to ""
+ZILLOW__APIKEY                             - The Zillow API key
+ZILLOW__POLLINGINTERVAL                    - [OPTIONAL] The delay between zestimates lookups, defaults to "1.00:03:31"
+ZILLOW__RESOURCES__#__ZPID                 - The n-th iteration of a Zillow Property ID for a specific property
+ZILLOW__RESOURCES__#__Slug                 - The n-th iteration of a slug to identify the specific Zillow Property ID
+ZILLOW__MQTT__TOPICPREFIX                  - [OPTIONAL] The MQTT topic on which to publish the collection lookup results, defaults to "home/zillow"
+ZILLOW__MQTT__DISCOVERYENABLED             - [OPTIONAL] The MQTT discovery flag for Home Assistant, defaults to false
+ZILLOW__MQTT__DISCOVERYPREFIX              - [OPTIONAL] The MQTT discovery prefix for Home Assistant, defaults to "homeassistant"
+ZILLOW__MQTT__DISCOVERYNAME                - [OPTIONAL] The MQTT discovery name for Home Assistant, defaults to "zillow"
+ZILLOW__MQTT__BROKER                       - [OPTIONAL] The MQTT broker, defaults to "test.mosquitto.org"
+ZILLOW__MQTT__USERNAME                     - [OPTIONAL] The MQTT username, default to ""
+ZILLOW__MQTT__PASSWORD                     - [OPTIONAL] The MQTT password, default to ""
 ```

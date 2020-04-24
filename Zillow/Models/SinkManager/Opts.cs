@@ -7,7 +7,7 @@ namespace Zillow.Models.SinkManager
     /// </summary>
     public class Opts : MQTTManagerOptions
     {
-        public const string Section = "Zillow:Sink";
+        public const string Section = "Zillow:MQTT";
 
         /// <summary>
         /// 

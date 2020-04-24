@@ -48,7 +48,7 @@ namespace Zillow.Managers
             new Resource
             {
                 ZPID = src.ZPID,
-                Amount = src.Amount,
+                ZEstimate = src.Amount,
             };
 
         /// <summary>

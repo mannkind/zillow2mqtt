@@ -26,14 +26,14 @@ namespace Zillow.Managers
         /// <param name="incomingData"></param>
         /// <param name="outgoingCommand"></param>
         /// <returns></returns>
-        public SinkManager(ILogger<SinkManager> logger, IOptions<Opts> sharedOpts, IOptions<Models.SinkManager.Opts> opts, 
+        public SinkManager(ILogger<SinkManager> logger, IOptions<Opts> sharedOpts, IOptions<Models.SinkManager.Opts> opts,
             ChannelReader<Resource> incomingData, ChannelWriter<Command> outgoingCommand) :
             base(logger, opts, incomingData, outgoingCommand, sharedOpts.Value.Resources)
         {
         }
 
         /// <inheritdoc />
-        protected override async Task HandleIncomingDataAsync(Resource input, 
+        protected override async Task HandleIncomingDataAsync(Resource input,
             CancellationToken cancellationToken = default)
         {
             var slug = this.Questions
@@ -47,7 +47,7 @@ namespace Zillow.Managers
             }
 
             await Task.WhenAll(
-                this.PublishAsync(this.StateTopic(slug, nameof(Resource.Amount)), input.Amount.ToString())
+                this.PublishAsync(this.StateTopic(slug, nameof(Resource.ZEstimate)), input.ZEstimate.ToString())
             );
 
         }
@@ -62,14 +62,14 @@ namespace Zillow.Managers
 
             var tasks = new List<Task>();
             var assembly = Assembly.GetAssembly(typeof(Program))?.GetName() ?? new AssemblyName();
-            var mapping = new [] 
+            var mapping = new[]
             {
-                new { Sensor = nameof(Resource.Amount), Type = Const.SENSOR },
+                new { Sensor = nameof(Resource.ZEstimate), Type = Const.SENSOR },
             };
 
             foreach (var input in this.Questions)
             {
-                foreach (var map in mapping) 
+                foreach (var map in mapping)
                 {
                     var discovery = this.BuildDiscovery(input.Slug, map.Sensor, assembly, false);
                     tasks.Add(this.PublishDiscoveryAsync(input.Slug, map.Sensor, map.Type, discovery, cancellationToken));

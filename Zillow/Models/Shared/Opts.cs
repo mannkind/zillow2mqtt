@@ -7,7 +7,7 @@ namespace Zillow.Models.Shared
     /// </summary>
     public class Opts
     {
-        public const string Section = "Zillow:Shared";
+        public const string Section = "Zillow";
 
         /// <summary>
         /// 

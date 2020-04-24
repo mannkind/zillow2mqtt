@@ -7,7 +7,7 @@ namespace Zillow.Models.SourceManager
     /// </summary>
     public class Opts
     {
-        public const string Section = "Zillow:Source";
+        public const string Section = "Zillow";
 
         /// <summary>
         /// 
