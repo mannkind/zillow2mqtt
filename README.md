@@ -7,7 +7,7 @@ License](https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square)]
 
 An experiment to publish Zillow ZEstimates to MQTT.
 
-See also Zillow's API documentation at <http://www.zillow.com/howto/api/APIOverview.htm>
+See also Zillow's API documentation at <http://www.zillow.com/howto/api/APIOverview.htm>.
 
 ## Use
 
@@ -54,3 +54,9 @@ ZILLOW__MQTT__BROKER                       - [OPTIONAL] The MQTT broker, default
 ZILLOW__MQTT__USERNAME                     - [OPTIONAL] The MQTT username, default to ""
 ZILLOW__MQTT__PASSWORD                     - [OPTIONAL] The MQTT password, default to ""
 ```
+
+## Prior Implementations
+
+### Golang
+* Last Commit: [682c80313cee963bd1c6c0948577ebffd9d551d2](https://github.com/mannkind/zillow2mqtt/commit/682c80313cee963bd1c6c0948577ebffd9d551d2)
+* Last Docker Image: [mannkind/zillow2mqtt:v0.4.20061.0152](https://hub.docker.com/layers/mannkind/zillow2mqtt/v0.4.20061.0152/images/sha256-4c450faf8bbac5a6dd55fdb084cebdeae256c01a9b27580b9f0302ec98e6842c?context=explore)

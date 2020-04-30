@@ -1,14 +1,13 @@
-using System.Threading.Tasks;
+using System;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.Net.Http;
-using Zillow.Models.Shared;
-using System.Xml;
-using Newtonsoft.Json.Linq;
-using System;
 using TwoMQTT.Core.DataAccess;
+using Zillow.Models.Shared;
+using Zillow.Services;
 
 namespace Zillow.DataAccess
 {
@@ -24,18 +23,18 @@ namespace Zillow.DataAccess
         /// <param name="opts"></param>
         /// <param name="httpClientFactory"></param>
         /// <returns></returns>
-        public SourceDAO(ILogger<SourceDAO> logger, IOptions<Models.SourceManager.Opts> opts, 
-            IHttpClientFactory httpClientFactory) : 
+        public SourceDAO(ILogger<SourceDAO> logger, IOptions<Models.SourceManager.Opts> opts,
+            IHttpClientFactory httpClientFactory) :
             base(logger, httpClientFactory)
         {
-            this.ApiKey = opts.Value.ApiKey;
+            this.ZillowClient = new ZillowClient(opts.Value.ApiKey);
         }
 
         /// <inheritdoc />
-        public override async Task<Models.SourceManager.FetchResponse?> FetchOneAsync(SlugMapping data, 
+        public override async Task<Models.SourceManager.FetchResponse?> FetchOneAsync(SlugMapping data,
             CancellationToken cancellationToken = default)
         {
-            try 
+            try
             {
                 return await this.FetchAsync(data.ZPID, cancellationToken);
             }
@@ -50,9 +49,9 @@ namespace Zillow.DataAccess
         }
 
         /// <summary>
-        /// The API Key to access the source.
+        /// The Client to access the source.
         /// </summary>
-        private readonly string ApiKey;
+        private readonly ZillowClient ZillowClient;
 
         /// <summary>
         /// Fetch one response from the source
@@ -60,23 +59,19 @@ namespace Zillow.DataAccess
         /// <param name="data"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<Models.SourceManager.FetchResponse?> FetchAsync(string zpid, 
+        private async Task<Models.SourceManager.FetchResponse?> FetchAsync(string zpid,
             CancellationToken cancellationToken = default)
         {
-            var baseUrl = "https://www.zillow.com/webservice/GetZestimate.htm";
-            var query = $"zws-id={this.ApiKey}&zpid={zpid}";
-            var resp = await this.Client.GetAsync($"{baseUrl}?{query}", cancellationToken);
-            resp.EnsureSuccessStatusCode();
-            var content = await resp.Content.ReadAsStringAsync();
-            var doc = new XmlDocument();
-            doc.LoadXml(content);
-            string jsonText = JsonConvert.SerializeXmlNode(doc);
-            var jsonObj = JObject.Parse(jsonText);
-            var response = jsonObj.SelectToken("$.Zestimate:zestimate.response") ?? new JObject();
+            var result = await this.ZillowClient.GetZestimateAsync(zpid);
+            if (result == null)
+            {
+                return null;
+            }
+
             return new Models.SourceManager.FetchResponse
             {
                 ZPID = zpid,
-                Amount = response.SelectToken(".zestimate.amount")?.Value<decimal>("#text") ?? default,
+                Amount = result.response.zestimate.amount.Value,
             };
         }
     }

@@ -13,7 +13,7 @@ namespace Zillow.Models.SourceManager
         /// 
         /// </summary>
         /// <value></value>
-        public string ApiKey { get; set; } = string.Empty;
+        public string ApiKey { get; set; } = "B1-AWz18xy032zklA_6Nmn1";
 
         /// <summary>
         /// 

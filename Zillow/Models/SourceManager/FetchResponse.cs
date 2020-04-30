@@ -17,7 +17,7 @@ namespace Zillow.Models.SourceManager
         /// 
         /// </summary>
         /// <value></value>
-        public decimal Amount { get; set; } = Decimal.MinValue;
+        public string Amount { get; set; } = string.Empty;
 
         /// <inheritdoc />
         public override string ToString() => $"ZPID: {this.ZPID}, Amount: {this.Amount}";

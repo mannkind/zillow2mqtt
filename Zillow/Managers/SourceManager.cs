@@ -1,11 +1,11 @@
-using System.Threading.Channels;
 using System.Linq;
+using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Zillow.Models.Shared;
-using TwoMQTT.Core.Managers;
-using Zillow.Models.SourceManager;
 using TwoMQTT.Core.DataAccess;
+using TwoMQTT.Core.Managers;
+using Zillow.Models.Shared;
+using Zillow.Models.SourceManager;
 
 namespace Zillow.Managers
 {
@@ -39,7 +39,7 @@ namespace Zillow.Managers
             this.Logger.LogInformation(
                 $"ApiKey: {this.Opts.ApiKey}\n" +
                 $"PollingInterval: {this.Opts.PollingInterval}\n" +
-                $"Resources: {this.SharedOpts.Resources.Select(x => $"{x.ZPID}:{x.Slug}")}\n" +
+                $"Resources: {string.Join(",", this.SharedOpts.Resources.Select(x => $"{x.ZPID}:{x.Slug}"))}\n" +
                 $""
             );
 

@@ -1,5 +1,3 @@
-using System;
-
 namespace Zillow.Models.Shared
 {
     /// <summary>
@@ -17,6 +15,6 @@ namespace Zillow.Models.Shared
         /// 
         /// </summary>
         /// <value></value>
-        public decimal ZEstimate { get; set; } = 0.0M;
+        public string ZEstimate { get; set; } = string.Empty;
     }
 }
