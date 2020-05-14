@@ -16,5 +16,8 @@ namespace Zillow.Models.Shared
         /// </summary>
         /// <value></value>
         public string ZEstimate { get; set; } = string.Empty;
+
+        /// <inheritdoc />
+        public override string ToString() => $"ZPID: {this.ZPID}; ZEstimate: {this.ZEstimate}";
     }
 }

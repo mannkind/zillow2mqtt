@@ -41,15 +41,18 @@ namespace Zillow.Managers
                 .Select(x => x.Slug)
                 .FirstOrDefault() ?? string.Empty;
 
+            this.Logger.LogDebug($"Found slug {slug} for incoming data for {input.ZPID}");
             if (string.IsNullOrEmpty(slug))
             {
+                this.Logger.LogDebug($"Unable to find slug for {input.ZPID}");
                 return;
             }
 
+            this.Logger.LogDebug($"Started publishing data for slug {slug}");
             await Task.WhenAll(
                 this.PublishAsync(this.StateTopic(slug, nameof(Resource.ZEstimate)), input.ZEstimate.ToString())
             );
-
+            this.Logger.LogDebug($"Finished publishing data for slug {slug}");
         }
 
         /// <inheritdoc />
@@ -71,6 +74,7 @@ namespace Zillow.Managers
             {
                 foreach (var map in mapping)
                 {
+                    this.Logger.LogDebug($"Generating discovery for {input.ZPID} - {map.Sensor}");
                     var discovery = this.BuildDiscovery(input.Slug, map.Sensor, assembly, false);
                     discovery.Icon = "mdi:home-variant";
 
