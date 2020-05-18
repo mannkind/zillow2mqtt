@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using TwoMQTT.Core.DataAccess;
 using Zillow.Models.Shared;
@@ -20,14 +19,13 @@ namespace Zillow.DataAccess
         /// Initializes a new instance of the SourceDAO class.
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="opts"></param>
         /// <param name="httpClientFactory"></param>
+        /// <param name="zillowClient"></param>
         /// <returns></returns>
-        public SourceDAO(ILogger<SourceDAO> logger, IOptions<Models.SourceManager.Opts> opts,
-            IHttpClientFactory httpClientFactory) :
+        public SourceDAO(ILogger<SourceDAO> logger, IHttpClientFactory httpClientFactory, IZillowClient zillowClient) :
             base(logger, httpClientFactory)
         {
-            this.ZillowClient = new ZillowClient(opts.Value.ApiKey);
+            this.ZillowClient = zillowClient;
         }
 
         /// <inheritdoc />
@@ -51,7 +49,7 @@ namespace Zillow.DataAccess
         /// <summary>
         /// The Client to access the source.
         /// </summary>
-        private readonly ZillowClient ZillowClient;
+        private readonly IZillowClient ZillowClient;
 
         /// <summary>
         /// Fetch one response from the source
