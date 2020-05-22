@@ -13,7 +13,7 @@ namespace Zillow.DataAccess
     /// <summary>
     /// An class representing a managed way to interact with a source.
     /// </summary>
-    public class SourceDAO : HTTPSourceDAO<SlugMapping, Command, Models.SourceManager.FetchResponse, object>
+    public class SourceDAO : SourceDAO<SlugMapping, Command, Models.SourceManager.FetchResponse, object>
     {
         /// <summary>
         /// Initializes a new instance of the SourceDAO class.
@@ -22,8 +22,8 @@ namespace Zillow.DataAccess
         /// <param name="httpClientFactory"></param>
         /// <param name="zillowClient"></param>
         /// <returns></returns>
-        public SourceDAO(ILogger<SourceDAO> logger, IHttpClientFactory httpClientFactory, IZillowClient zillowClient) :
-            base(logger, httpClientFactory)
+        public SourceDAO(ILogger<SourceDAO> logger, IZillowClient zillowClient) :
+            base(logger)
         {
             this.ZillowClient = zillowClient;
         }

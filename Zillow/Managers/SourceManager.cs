@@ -12,7 +12,7 @@ namespace Zillow.Managers
     /// <summary>
     /// An class representing a managed way to interact with a source.
     /// </summary>
-    public class SourceManager : HTTPPollingManager<SlugMapping, FetchResponse, object, Resource, Command>
+    public class SourceManager : APIPollingManager<SlugMapping, FetchResponse, object, Resource, Command>
     {
         /// <summary>
         /// Initializes a new instance of the SourceManager class.
@@ -26,8 +26,7 @@ namespace Zillow.Managers
         /// <returns></returns>
         public SourceManager(ILogger<SourceManager> logger, IOptions<Models.Shared.Opts> sharedOpts,
             IOptions<Models.SourceManager.Opts> opts, ChannelWriter<Resource> outgoingData,
-            ChannelReader<Command> incomingCommand,
-            IHTTPSourceDAO<SlugMapping, Command, FetchResponse, object> sourceDAO) :
+            ChannelReader<Command> incomingCommand, ISourceDAO<SlugMapping, Command, FetchResponse, object> sourceDAO) :
             base(logger, outgoingData, incomingCommand, sharedOpts.Value.Resources, opts.Value.PollingInterval,
                 sourceDAO, SourceSettings(sharedOpts.Value, opts.Value))
         {
