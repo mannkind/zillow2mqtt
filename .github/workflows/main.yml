@@ -29,7 +29,7 @@ jobs:
         run: |
           dotnet build -c Release -o output ${BUILD_APP}
           dotnet test ${BUILD_APP}Test
-          echo "::set-env name=BUILD_VERSION::$(./${BUILD_APP}/bin/Release/netcoreapp3.1/${BUILD_APP} -- version)"
+          echo "::set-env name=BUILD_VERSION::$(./output/${BUILD_APP} -- version)"
 
       - name: Set up Docker Buildx
         id: buildx
