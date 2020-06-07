@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TwoMQTT.Core;
 using TwoMQTT.Core.Managers;
+using TwoMQTT.Core.Models;
 using Zillow.Models.Shared;
 
 namespace Zillow.Managers
@@ -41,29 +42,26 @@ namespace Zillow.Managers
                 .Select(x => x.Slug)
                 .FirstOrDefault() ?? string.Empty;
 
-            this.Logger.LogDebug($"Found slug {slug} for incoming data for {input.ZPID}");
             if (string.IsNullOrEmpty(slug))
             {
                 this.Logger.LogDebug($"Unable to find slug for {input.ZPID}");
                 return;
             }
 
+            this.Logger.LogDebug($"Found slug {slug} for incoming data for {input.ZPID}");
             this.Logger.LogDebug($"Started publishing data for slug {slug}");
-            await Task.WhenAll(
-                this.PublishAsync(this.StateTopic(slug, nameof(Resource.ZEstimate)), input.ZEstimate.ToString())
-            );
+            var publish = new[]
+            {
+                (this.StateTopic(slug, nameof(Resource.ZEstimate)), input.ZEstimate.ToString()),
+            };
+            await this.PublishAsync(publish, cancellationToken);
             this.Logger.LogDebug($"Finished publishing data for slug {slug}");
         }
 
         /// <inheritdoc />
-        protected override async Task HandleDiscoveryAsync(CancellationToken cancellationToken = default)
+        protected override IEnumerable<(string slug, string sensor, string type, MQTTDiscovery discovery)> Discoveries()
         {
-            if (!this.Opts.DiscoveryEnabled)
-            {
-                return;
-            }
-
-            var tasks = new List<Task>();
+            var discoveries = new List<(string, string, string, MQTTDiscovery)>();
             var assembly = Assembly.GetAssembly(typeof(Program))?.GetName() ?? new AssemblyName();
             var mapping = new[]
             {
@@ -78,11 +76,11 @@ namespace Zillow.Managers
                     var discovery = this.BuildDiscovery(input.Slug, map.Sensor, assembly, false);
                     discovery.Icon = "mdi:home-variant";
 
-                    tasks.Add(this.PublishDiscoveryAsync(input.Slug, map.Sensor, map.Type, discovery, cancellationToken));
+                    discoveries.Add((input.Slug, map.Sensor, map.Type, discovery));
                 }
             }
 
-            await Task.WhenAll(tasks);
+            return discoveries;
         }
     }
 }
