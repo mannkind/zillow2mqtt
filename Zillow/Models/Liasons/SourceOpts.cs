@@ -1,11 +1,11 @@
 using System;
 
-namespace Zillow.Models.SourceManager
+namespace Zillow.Models.Options
 {
     /// <summary>
     /// The source options
     /// </summary>
-    public class Opts
+    public class SourceOpts
     {
         public const string Section = "Zillow";
 
