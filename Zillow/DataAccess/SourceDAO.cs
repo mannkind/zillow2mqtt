@@ -4,16 +4,27 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using TwoMQTT.Core.DataAccess;
 using Zillow.Models.Shared;
+using Zillow.Models.Source;
 using Zillow.Services;
 
 namespace Zillow.DataAccess
 {
+    public interface ISourceDAO
+    {
+        /// <summary>
+        /// Fetch one response from the source.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<FetchResponse?> FetchOneAsync(SlugMapping data, CancellationToken cancellationToken = default);
+    }
+
     /// <summary>
     /// An class representing a managed way to interact with a source.
     /// </summary>
-    public class SourceDAO : SourceDAO<SlugMapping, Command, Models.SourceManager.FetchResponse, object>
+    public class SourceDAO : ISourceDAO
     {
         /// <summary>
         /// Initializes a new instance of the SourceDAO class.
@@ -22,14 +33,14 @@ namespace Zillow.DataAccess
         /// <param name="httpClientFactory"></param>
         /// <param name="zillowClient"></param>
         /// <returns></returns>
-        public SourceDAO(ILogger<SourceDAO> logger, IZillowClient zillowClient) :
-            base(logger)
+        public SourceDAO(ILogger<SourceDAO> logger, IZillowClient zillowClient)
         {
+            this.Logger = logger;
             this.ZillowClient = zillowClient;
         }
 
         /// <inheritdoc />
-        public override async Task<Models.SourceManager.FetchResponse?> FetchOneAsync(SlugMapping data,
+        public async Task<FetchResponse?> FetchOneAsync(SlugMapping data,
             CancellationToken cancellationToken = default)
         {
             try
@@ -47,17 +58,22 @@ namespace Zillow.DataAccess
         }
 
         /// <summary>
-        /// The Client to access the source.
+        /// The logger used internally.
+        /// </summary>
+        private readonly ILogger<SourceDAO> Logger;
+
+        /// <summary>
+        /// The client to access the source.
         /// </summary>
         private readonly IZillowClient ZillowClient;
 
         /// <summary>
         /// Fetch one response from the source
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="zpid"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<Models.SourceManager.FetchResponse?> FetchAsync(string zpid,
+        private async Task<FetchResponse?> FetchAsync(string zpid,
             CancellationToken cancellationToken = default)
         {
             this.Logger.LogDebug($"Started finding {zpid} from Zillow");
@@ -70,7 +86,7 @@ namespace Zillow.DataAccess
 
             this.Logger.LogDebug($"Finished finding {zpid} from Zillow");
 
-            return new Models.SourceManager.FetchResponse
+            return new FetchResponse
             {
                 ZPID = zpid,
                 Amount = result.response.zestimate.amount.Value,

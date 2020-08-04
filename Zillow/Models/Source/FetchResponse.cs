@@ -1,6 +1,6 @@
 using System;
 
-namespace Zillow.Models.SourceManager
+namespace Zillow.Models.Source
 {
     /// <summary>
     /// The response from the source
