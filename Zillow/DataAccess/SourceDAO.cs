@@ -76,15 +76,15 @@ namespace Zillow.DataAccess
         private async Task<FetchResponse?> FetchAsync(string zpid,
             CancellationToken cancellationToken = default)
         {
-            this.Logger.LogDebug($"Started finding {zpid} from Zillow");
+            this.Logger.LogInformation("Started finding {zpid} from Zillow", zpid);
             var result = await this.ZillowClient.GetZestimateAsync(zpid);
             if (result == null)
             {
-                this.Logger.LogDebug($"Unable to find {zpid} from Zillow");
+                this.Logger.LogDebug("Unable to find {zpid} from Zillow", zpid);
                 return null;
             }
 
-            this.Logger.LogDebug($"Finished finding {zpid} from Zillow");
+            this.Logger.LogDebug("Finished finding {zpid} from Zillow", zpid);
 
             return new FetchResponse
             {
