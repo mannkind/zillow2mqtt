@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using TwoMQTT.Core;
 using TwoMQTT.Core.Extensions;
-using TwoMQTT.Core.Interfaces;
 using TwoMQTT.Core.Utils;
 using Zillow.DataAccess;
 using Zillow.Liasons;

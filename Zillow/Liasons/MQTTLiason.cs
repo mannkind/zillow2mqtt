@@ -39,11 +39,11 @@ namespace Zillow.Liasons
 
             if (string.IsNullOrEmpty(slug))
             {
-                this.Logger.LogDebug($"Unable to find slug for {input.ZPID}");
+                this.Logger.LogDebug("Unable to find slug for {zpid}", input.ZPID);
                 return results;
             }
 
-            this.Logger.LogDebug($"Found slug {slug} for incoming data for {input.ZPID}");
+            this.Logger.LogDebug("Found slug {slug} for incoming data for {zpid}", slug, input.ZPID);
             results.AddRange(new[]
                 {
                     (this.Generator.StateTopic(slug, nameof(Resource.ZEstimate)), input.ZEstimate.ToString()),
@@ -67,7 +67,7 @@ namespace Zillow.Liasons
             {
                 foreach (var map in mapping)
                 {
-                    this.Logger.LogDebug($"Generating discovery for {input.ZPID} - {map.Sensor}");
+                    this.Logger.LogDebug("Generating discovery for {zpid} - {sensor}", input.ZPID, map.Sensor);
                     var discovery = this.Generator.BuildDiscovery(input.Slug, map.Sensor, assembly, false);
                     discovery.Icon = "mdi:home-variant";
 

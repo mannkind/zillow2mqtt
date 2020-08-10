@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Microsoft.Extensions.Logging;
@@ -25,10 +23,13 @@ namespace Zillow.Liasons
             this.Questions = sharedOpts.Value.Resources;
 
             this.Logger.LogInformation(
-                $"ApiKey: {opts.Value.ApiKey}\n" +
-                $"PollingInterval: {opts.Value.PollingInterval}\n" +
-                $"Resources: {string.Join(",", sharedOpts.Value.Resources.Select(x => $"{x.ZPID}:{x.Slug}"))}\n" +
-                $""
+                "ApiKey: {apiKey}\n" +
+                "PollingInterval: {pollingInterval}\n" +
+                "Resources: {@resources}\n" +
+                "",
+                opts.Value.ApiKey,
+                opts.Value.PollingInterval,
+                sharedOpts.Value.Resources
             );
         }
 
@@ -37,7 +38,7 @@ namespace Zillow.Liasons
         {
             foreach (var key in this.Questions)
             {
-                this.Logger.LogDebug($"Looking up {key}");
+                this.Logger.LogDebug("Looking up {key}", key);
                 var result = await this.SourceDAO.FetchOneAsync(key, cancellationToken);
                 var resp = result != null ? this.MapData(result) : null;
                 yield return resp;
