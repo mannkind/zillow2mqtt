@@ -4,21 +4,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using TwoMQTT.Core.Interfaces;
 using Zillow.Models.Shared;
 using Zillow.Models.Source;
 using Zillow.Services;
 
 namespace Zillow.DataAccess
 {
-    public interface ISourceDAO
+    public interface ISourceDAO : ISourceDAO<SlugMapping, Response, Command, object>
     {
-        /// <summary>
-        /// Fetch one response from the source.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<FetchResponse?> FetchOneAsync(SlugMapping data, CancellationToken cancellationToken = default);
     }
 
     /// <summary>
@@ -40,7 +34,7 @@ namespace Zillow.DataAccess
         }
 
         /// <inheritdoc />
-        public async Task<FetchResponse?> FetchOneAsync(SlugMapping data,
+        public async Task<Response?> FetchOneAsync(SlugMapping data,
             CancellationToken cancellationToken = default)
         {
             try
@@ -73,7 +67,7 @@ namespace Zillow.DataAccess
         /// <param name="zpid"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<FetchResponse?> FetchAsync(string zpid,
+        private async Task<Response?> FetchAsync(string zpid,
             CancellationToken cancellationToken = default)
         {
             this.Logger.LogInformation("Started finding {zpid} from Zillow", zpid);
@@ -86,7 +80,7 @@ namespace Zillow.DataAccess
 
             this.Logger.LogDebug("Finished finding {zpid} from Zillow", zpid);
 
-            return new FetchResponse
+            return new Response
             {
                 ZPID = zpid,
                 Amount = result.response.zestimate.amount.Value,

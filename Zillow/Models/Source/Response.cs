@@ -5,7 +5,7 @@ namespace Zillow.Models.Source
     /// <summary>
     /// The response from the source
     /// </summary>
-    public class FetchResponse
+    public class Response
     {
         /// <summary>
         /// 
