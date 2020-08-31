@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using TwoMQTT.Core;
 using TwoMQTT.Core.Extensions;
-using TwoMQTT.Core.Utils;
+using TwoMQTT.Core.Interfaces;
+using TwoMQTT.Core.Managers;
 using Zillow.DataAccess;
 using Zillow.Liasons;
 using Zillow.Models.Shared;
@@ -45,12 +47,22 @@ namespace Zillow
                 .AddSingleton<IThrottleManager, ThrottleManager>(x =>
                 {
                     var opts = x.GetService<IOptions<Models.Options.SourceOpts>>();
+                    if (opts == null)
+                    {
+                        throw new ArgumentException($"{nameof(opts.Value.PollingInterval)} is required for {nameof(ThrottleManager)}.");
+                    }
+
                     return new ThrottleManager(opts.Value.PollingInterval);
                 })
                 .AddSingleton<ISourceDAO, SourceDAO>()
                 .AddSingleton<IZillowClient>(x =>
                 {
                     var opts = x.GetService<IOptions<Models.Options.SourceOpts>>();
+                    if (opts == null)
+                    {
+                        throw new ArgumentException($"{nameof(opts.Value.ApiKey)} is required for {nameof(ZillowClient)}.");
+                    }
+
                     return new ZillowClient(opts.Value.ApiKey);
                 });
         }

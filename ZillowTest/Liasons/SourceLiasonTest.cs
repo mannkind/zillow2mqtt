@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +36,7 @@ namespace ZillowTest.Liasons
                 });
 
                 sourceDAO.Setup(x => x.FetchOneAsync(test.Q, It.IsAny<CancellationToken>()))
-                     .ReturnsAsync(new Zillow.Models.Source.FetchResponse
+                     .ReturnsAsync(new Zillow.Models.Source.Response
                      {
                          ZPID = test.Expected.ZPID,
                          Amount = test.Expected.ZEstimate,
