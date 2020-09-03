@@ -5,19 +5,19 @@ namespace Zillow.Models.Source
     /// <summary>
     /// The response from the source
     /// </summary>
-    public class Response
+    public record Response
     {
         /// <summary>
         /// 
         /// </summary>
         /// <value></value>
-        public string ZPID { get; set; } = string.Empty;
+        public string ZPID { get; init; } = string.Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <value></value>
-        public string Amount { get; set; } = string.Empty;
+        public string Amount { get; init; } = string.Empty;
 
         /// <inheritdoc />
         public override string ToString() => $"ZPID: {this.ZPID}, Amount: {this.Amount}";
