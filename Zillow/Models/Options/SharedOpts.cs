@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using TwoMQTT.Core.Interfaces;
+using TwoMQTT.Interfaces;
 using Zillow.Models.Shared;
 
 namespace Zillow.Models.Options

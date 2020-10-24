@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using TwoMQTT.Core;
-using TwoMQTT.Core.Extensions;
-using TwoMQTT.Core.Interfaces;
-using TwoMQTT.Core.Managers;
+using TwoMQTT;
+using TwoMQTT.Extensions;
+using TwoMQTT.Interfaces;
+using TwoMQTT.Managers;
 using Zillow.DataAccess;
 using Zillow.Liasons;
 using Zillow.Models.Shared;
@@ -43,7 +43,7 @@ namespace Zillow
             return services
                 .ConfigureOpts<Models.Options.SharedOpts>(hostContext, Models.Options.SharedOpts.Section)
                 .ConfigureOpts<Models.Options.SourceOpts>(hostContext, Models.Options.SourceOpts.Section)
-                .ConfigureOpts<TwoMQTT.Core.Models.MQTTManagerOptions>(hostContext, Models.Options.MQTTOpts.Section)
+                .ConfigureOpts<TwoMQTT.Models.MQTTManagerOptions>(hostContext, Models.Options.MQTTOpts.Section)
                 .AddSingleton<IThrottleManager, ThrottleManager>(x =>
                 {
                     var opts = x.GetService<IOptions<Models.Options.SourceOpts>>();

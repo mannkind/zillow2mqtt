@@ -3,13 +3,13 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TwoMQTT.Core;
-using TwoMQTT.Core.Models;
-using TwoMQTT.Core.Utils;
-using TwoMQTT.Core.Liasons;
+using TwoMQTT;
+using TwoMQTT.Models;
+using TwoMQTT.Utils;
+using TwoMQTT.Liasons;
 using Zillow.Models.Options;
 using Zillow.Models.Shared;
-using TwoMQTT.Core.Interfaces;
+using TwoMQTT.Interfaces;
 
 namespace Zillow.Liasons
 {
