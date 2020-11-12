@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="twomqtt" Version="0.9.20298.1453-dev" />
+    <PackageReference Include="twomqtt" Version="0.9.*" />
     <PackageReference Include="Zillow.Services" Version="1.0.1" />
   </ItemGroup>
 
