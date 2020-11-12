@@ -4,14 +4,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using TwoMQTT.Core.Interfaces;
+using TwoMQTT.Interfaces;
 using Zillow.Models.Shared;
 using Zillow.Models.Source;
 using Zillow.Services;
 
 namespace Zillow.DataAccess
 {
-    public interface ISourceDAO : ISourceDAO<SlugMapping, Response, Command, object>
+    public interface ISourceDAO : ISourceDAO<SlugMapping, Response, object, object>
     {
     }
 
@@ -43,9 +43,12 @@ namespace Zillow.DataAccess
             }
             catch (Exception e)
             {
-                var msg = e is HttpRequestException ? "Unable to fetch from the Zillow API" :
-                          e is JsonException ? "Unable to deserialize response from the Zillow API" :
-                          "Unable to send to the Zillow API";
+                var msg = e switch
+                {
+                    HttpRequestException => "Unable to fetch from the Zillow API",
+                    JsonException => "Unable to deserialize response from the Zillow API",
+                    _ => "Unable to send to the Zillow API"
+                };
                 this.Logger.LogError(msg, e);
                 return null;
             }
@@ -72,18 +75,16 @@ namespace Zillow.DataAccess
         {
             this.Logger.LogInformation("Started finding {zpid} from Zillow", zpid);
             var result = await this.ZillowClient.GetZestimateAsync(zpid);
-            if (result == null)
-            {
-                this.Logger.LogDebug("Unable to find {zpid} from Zillow", zpid);
-                return null;
-            }
-
             this.Logger.LogDebug("Finished finding {zpid} from Zillow", zpid);
 
-            return new Response
+            return result switch
             {
-                ZPID = zpid,
-                Amount = result.response.zestimate.amount.Value,
+                Zillow.Services.Schema.zestimateResultType => new Response
+                {
+                    ZPID = zpid,
+                    Amount = result.response.zestimate.amount.Value,
+                },
+                _ => null
             };
         }
     }

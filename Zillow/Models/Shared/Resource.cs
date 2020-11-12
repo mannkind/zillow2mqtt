@@ -3,19 +3,19 @@ namespace Zillow.Models.Shared
     /// <summary>
     /// The shared resource across the application
     /// </summary>
-    public class Resource
+    public record Resource
     {
         /// <summary>
         /// 
         /// </summary>
         /// <value></value>
-        public string ZPID { get; set; } = string.Empty;
+        public string ZPID { get; init; } = string.Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <value></value>
-        public string ZEstimate { get; set; } = string.Empty;
+        public string ZEstimate { get; init; } = string.Empty;
 
         /// <inheritdoc />
         public override string ToString() => $"ZPID: {this.ZPID}; ZEstimate: {this.ZEstimate}";

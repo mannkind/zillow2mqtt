@@ -3,18 +3,18 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TwoMQTT.Core;
-using TwoMQTT.Core.Models;
-using TwoMQTT.Core.Utils;
-using TwoMQTT.Core.Liasons;
+using TwoMQTT;
+using TwoMQTT.Models;
+using TwoMQTT.Utils;
+using TwoMQTT.Liasons;
 using Zillow.Models.Options;
 using Zillow.Models.Shared;
-using TwoMQTT.Core.Interfaces;
+using TwoMQTT.Interfaces;
 
 namespace Zillow.Liasons
 {
     /// <inheritdoc />
-    public class MQTTLiason : MQTTLiasonBase<Resource, Command, SlugMapping, SharedOpts>, IMQTTLiason<Resource, Command>
+    public class MQTTLiason : MQTTLiasonBase<Resource, object, SlugMapping, SharedOpts>, IMQTTLiason<Resource, object>
     {
         /// <summary>
         /// 
@@ -68,7 +68,7 @@ namespace Zillow.Liasons
                 {
                     this.Logger.LogDebug("Generating discovery for {zpid} - {sensor}", input.ZPID, map.Sensor);
                     var discovery = this.Generator.BuildDiscovery(input.Slug, map.Sensor, assembly, false);
-                    discovery.Icon = "mdi:home-variant";
+                    discovery = discovery with { Icon = "mdi:home-variant" };
 
                     discoveries.Add((input.Slug, map.Sensor, map.Type, discovery));
                 }
