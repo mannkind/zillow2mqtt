@@ -49,7 +49,7 @@ namespace Zillow.DataAccess
                     JsonException => "Unable to deserialize response from the Zillow API",
                     _ => "Unable to send to the Zillow API"
                 };
-                this.Logger.LogError(msg, e);
+                this.Logger.LogError(msg + "; {exception}", e);
                 return null;
             }
         }
@@ -77,9 +77,9 @@ namespace Zillow.DataAccess
             var result = await this.ZillowClient.GetZestimateAsync(zpid);
             this.Logger.LogDebug("Finished finding {zpid} from Zillow", zpid);
 
-            return result switch
+            return result?.response switch
             {
-                Zillow.Services.Schema.zestimateResultType => new Response
+                Zillow.Services.Schema.DetailedProperty => new Response
                 {
                     ZPID = zpid,
                     Amount = result.response.zestimate.amount.Value,

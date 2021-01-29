@@ -16,8 +16,5 @@ namespace Zillow.Models.Shared
         /// </summary>
         /// <value></value>
         public string Slug { get; init; } = string.Empty;
-
-        /// <inheritdoc />
-        public override string ToString() => $"ZPID: {this.ZPID}, Slug: {this.Slug}";
     }
 }
