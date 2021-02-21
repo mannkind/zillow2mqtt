@@ -18,8 +18,5 @@ namespace Zillow.Models.Source
         /// </summary>
         /// <value></value>
         public string Amount { get; init; } = string.Empty;
-
-        /// <inheritdoc />
-        public override string ToString() => $"ZPID: {this.ZPID}, Amount: {this.Amount}";
     }
 }

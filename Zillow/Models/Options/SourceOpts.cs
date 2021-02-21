@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Zillow.Models.Options
 {
@@ -13,12 +14,14 @@ namespace Zillow.Models.Options
         /// 
         /// </summary>
         /// <value></value>
-        public string ApiKey { get; init; } = "B1-AWz18xy032zklA_6Nmn1";
+        [Required(ErrorMessage = Section + ":" + nameof(ApiKey) + " is missing")]
+        public string ApiKey { get; init; } = string.Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public TimeSpan PollingInterval { get; init; } = new TimeSpan(24, 3, 31);
+        [Required(ErrorMessage = Section + ":" + nameof(PollingInterval) + " is missing")]
+        public TimeSpan PollingInterval { get; init; } = new(24, 3, 31);
     }
 }
