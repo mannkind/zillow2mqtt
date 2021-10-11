@@ -11,7 +11,7 @@ using Zillow.Services;
 
 namespace Zillow.DataAccess
 {
-    public interface ISourceDAO : ISourceDAO<SlugMapping, Response, object, object>
+    public interface ISourceDAO : IPollingSourceDAO<SlugMapping, Response, object, object>
     {
     }
 
