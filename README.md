@@ -1,3 +1,9 @@
+# unmaintained
+
+It appears that in Oct 2021, Zillow stopped supporting the API.
+
+HTTP 410 GONE
+
 # zillow2mqtt
 
 [![Software
