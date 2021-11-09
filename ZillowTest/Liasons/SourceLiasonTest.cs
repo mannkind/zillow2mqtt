@@ -43,7 +43,7 @@ namespace ZillowTest.Liasons
                      });
 
                 var sourceLiason = new SourceLiason(logger.Object, sourceDAO.Object, opts, sharedOpts);
-                await foreach (var result in sourceLiason.FetchAllAsync())
+                await foreach (var result in sourceLiason.ReceiveDataAsync())
                 {
                     Assert.AreEqual(test.Expected.ZPID, result.ZPID);
                     Assert.AreEqual(test.Expected.ZEstimate, result.ZEstimate);
